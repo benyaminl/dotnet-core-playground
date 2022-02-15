@@ -6,4 +6,4 @@ I don't provide any other readme as this is just a playground for myself. kindly
 
 ## Run and build project
 
-Restore using `dotnet restore` (restore)[https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-restore], then `dotnet run` (run)[https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run]. Then you are good to go.
+Restore using `dotnet restore` [restore](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-restore), then `dotnet run` [run](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run). Then you are good to go.
