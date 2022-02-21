@@ -86,5 +86,40 @@ namespace TodoApi.Controllers {
             };
             return Ok(result);
         }
+
+        /// <summary>
+        /// Hapus Mahasiswa spesific!
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>Message success/failure</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/Coba/upload
+        ///
+        /// </remarks>
+        /// <response code="200">File valid</response>
+        /// <response code="400">File tidak valid, pendek!</response>
+        [HttpPost("upload")]
+        public ActionResult uploadFile(IFormFile file) {
+            long size = file.Length;
+            if (size <= 0) 
+                return BadRequest(new {
+                    panjang = 0,
+                    message = "File pendek!"
+                });
+            else {
+                // https://docs.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-6.0#file-upload-scenarios
+                // Ambil random filename yang di temp belum dipakai
+                var filePath = Path.GetTempFileName();
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    // Ini lokasi dimana file disimpan, jadi... 
+                    file.CopyToAsync(stream);
+                }
+                var result = new {panjang = size, path = filePath};
+                return Ok(result);
+            }
+        }
     }
 }
