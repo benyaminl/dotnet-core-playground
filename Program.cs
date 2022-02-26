@@ -4,6 +4,10 @@ using TodoApi;
 using Middleware.TodoApi;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using TodoApi.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +27,25 @@ try {
     Console.WriteLine(e.ToString());
 }
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, 
+    options => {
+        // builder.Configuration.Bind("JwtSettings", options);
+
+        // options.RequireHttpsMetadata = false;
+        options.SaveToken = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = "LocalDev",
+            ValidIssuer = "LocalDev",
+            // Secret key nya
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("971923712907391273921"))
+        };
+
+    });
+
 builder.Services.AddSwaggerGen(c =>
 {
   c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
@@ -31,20 +54,22 @@ builder.Services.AddSwaggerGen(c =>
     Name = "Authorization",
     Type = SecuritySchemeType.ApiKey 
   });
-  c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-   { 
-     new OpenApiSecurityScheme 
-     { 
-       Reference = new OpenApiReference 
-       { 
-         Type = ReferenceType.SecurityScheme,
-         Id = "Bearer" 
-       } 
-      },
-      new string[] { } 
-    } 
-  });
-  
+  // c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+  //  { 
+  //    new OpenApiSecurityScheme 
+  //    { 
+  //      Reference = new OpenApiReference 
+  //      { 
+  //        Type = ReferenceType.SecurityScheme,
+  //        Id = "Bearer" 
+  //      } 
+  //     },
+  //     new string[] { } 
+  //   } 
+  // });
+
+  // This is for Making Auto Swagger Filter for Auth and non Auth
+  c.OperationFilter<AuthOperationFilter>();
   var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
   c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 }
@@ -59,10 +84,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// global cors policy
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.UseHttpsRedirection();
 app.UseStatusCodePages("application/json","{{\"status\":{0}, \"message\": \"Oops, are you sure resource/end point really here? Or probably bad requests?\" }}");
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/WeatherForecast"), app => {
     app.UseAuth();

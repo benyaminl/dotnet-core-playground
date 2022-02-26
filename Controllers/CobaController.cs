@@ -3,6 +3,12 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using TodoApi.Models.Requests;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TodoApi.Controllers {
     [Route("api/[controller]")]
@@ -120,6 +126,34 @@ namespace TodoApi.Controllers {
                 var result = new {panjang = size, path = filePath};
                 return Ok(result);
             }
+        }
+    
+        [Authorize]
+        [HttpGet("profile")]
+        public ActionResult getProfile([FromHeader] string Authorization) {
+            string auth = Authorization.Split(" ")[1];
+            JwtSecurityToken jwt = new JwtSecurityToken(auth);
+            return Ok(jwt);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public ActionResult login([FromBody] LoginRequest d) {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("971923712907391273921"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, d.user),
+                        new Claim(JwtRegisteredClaimNames.Jti, d.user),
+                        new Claim("Random Payload", "Custom"),
+                    };
+            var token = new JwtSecurityToken("LocalDev",
+            "LocalDev",
+            claims,
+            expires: DateTime.Now.AddMinutes(1),
+            signingCredentials: creds);
+
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
         }
     }
 }
