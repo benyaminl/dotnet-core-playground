@@ -8,6 +8,7 @@ namespace TodoApi.Models {
         public string? nama {get; set;}
         public string? alamat {get; set;}
         public string? telepon {get; set;}
+        public DateTime tglLahir {get; set;}
         
         // [InverseProperty("mhs")]
         [ForeignKey("nrp")]

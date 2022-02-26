@@ -11,6 +11,8 @@ namespace TodoApi.Models {
         
         public byte nilai {get; set;}
 
+        public DateTime tanggalInput {get; set;}
+
         [JsonIgnore]
         public MhsModel mhs {get; set;}
     }
