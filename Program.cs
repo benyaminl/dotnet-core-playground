@@ -8,6 +8,7 @@ using TodoApi.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Minio.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
+
+builder.Services.AddMinio(opt => {
+    opt.Endpoint = "172.18.51.72:9000";
+    opt.AccessKey = "api-coba";
+    opt.SecretKey = "cUQ4A6ytTPrY5jt";
+});
 
 try {
     builder.Services.AddDbContext<AppDBContext>(
