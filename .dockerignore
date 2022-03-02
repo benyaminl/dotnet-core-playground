@@ -1,0 +1,15 @@
+# @see https://docs.docker.com/engine/reference/builder/#dockerignore-file
+# @see https://stackoverflow.com/a/56811885
+
+.dockerignore
+.env
+.git
+.gitignore
+.vs
+.vscode
+docker-compose.yml
+docker-compose.*.yml
+**/bin
+**/obj
+bin/
+obj/
