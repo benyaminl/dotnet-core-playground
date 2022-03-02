@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Minio.AspNetCore;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +22,9 @@ builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
 
 builder.Services.AddMinio(opt => {
-    opt.Endpoint = "minios3:9000";
-    opt.AccessKey = "minio";
-    opt.SecretKey = "minio123";
+    opt.Endpoint = Environment.GetEnvironmentVariable("MINIO_ENDPOINT").ToString();
+    opt.AccessKey = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY").ToString();
+    opt.SecretKey = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY").ToString();
 });
 
 try {
