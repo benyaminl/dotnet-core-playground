@@ -21,7 +21,7 @@ builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
 
 builder.Services.AddMinio(opt => {
-    opt.Endpoint = "localhost:9000";
+    opt.Endpoint = "minios3:9000";
     opt.AccessKey = "minio";
     opt.SecretKey = "minio123";
 });
