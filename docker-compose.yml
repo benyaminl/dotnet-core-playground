@@ -16,7 +16,9 @@ services:
       - minios3
   
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    build: 
+      context: .
+      dockerfile: sqlserver.Dockerfile # @see https://docs.docker.com/compose/compose-file/compose-file-v3/#context
     ports:
       - "1433:1433"
     environment:
