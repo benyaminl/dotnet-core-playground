@@ -14,6 +14,11 @@ services:
       MINIO_ENDPOINT: host.docker.internal:9000 # change according your need, @see https://github.com/minio/minio/issues/8007
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
+      MSSQL_DB: "${MSSQL_DB}"
+      MSSQL_USER: "${MSSQL_USER}"
+      MSSQL_PASS: "${MSSQL_PASS}"
+      MSSQL_PORT: "${MSSQL_PORT}"
+      MSSQL_HOST: "${MSSQL_HOST}"
     # depends_on:
       # - sqlserver
       # - minios3

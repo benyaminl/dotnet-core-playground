@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using EntityFrameworkCore.UseRowNumberForPaging;
 using TodoApi.Models;
 using TodoApi;
 using Middleware.TodoApi;
@@ -23,14 +24,19 @@ builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
 
 builder.Services.AddMinio(opt => {
-    opt.Endpoint = Environment.GetEnvironmentVariable("MINIO_ENDPOINT").ToString();
-    opt.AccessKey = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY").ToString();
-    opt.SecretKey = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY").ToString();
+    opt.Endpoint = Environment.GetEnvironmentVariable("MINIO_ENDPOINT")?.ToString() ?? "minio";
+    opt.AccessKey = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY")?.ToString() ?? "minio123";
+    opt.SecretKey = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY")?.ToString() ?? "localhost";
 });
 
 try {
+    string host = Environment.GetEnvironmentVariable("MSSQL_HOST") ?? "localhost";
+    string user = Environment.GetEnvironmentVariable("MSSQL_USER") ?? "sa";
+    string pass = Environment.GetEnvironmentVariable("MSSQL_PASS") ?? "12345";
+    string port = Environment.GetEnvironmentVariable("MSSQL_PORT") ?? "1433";
+    string db   = Environment.GetEnvironmentVariable("MSSQL_DB") ?? "AdventureWorks2008R2";
     builder.Services.AddDbContext<AppDBContext>(
-        opt => opt.UseSqlServer(@"Server=localhost;Database=coba;Trusted_Connection=True")
+        opt => opt.UseSqlServer(@"Server="+host+","+port+";Database="+db+";User Id="+user+";Password="+pass, i => i.UseRowNumberForPaging())
     );
 } catch(Exception e) {
     Console.WriteLine(e.ToString());

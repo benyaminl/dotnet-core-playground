@@ -17,5 +17,6 @@ namespace TodoApi {
 
         public DbSet<MhsModel> mhs {get; set;} = null!;
         public DbSet<NilaiModel> nilai {get; set;} = null!;
+        public DbSet<ProductModel> product {get; set;} = null!;
     }
 }
