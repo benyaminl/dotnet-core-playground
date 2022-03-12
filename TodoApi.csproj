@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <!-- <RuntimeIdentifier>linux-x64;win10-x64</RuntimeIdentifier> -->
+    <UserSecretsId>ebdb639a-c666-4003-882d-3adede71fedf</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

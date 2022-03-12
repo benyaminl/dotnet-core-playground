@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Minio.AspNetCore;
 using Minio;
+using TodoApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,6 +101,8 @@ app.UseCors(x => x
 
 app.UseHttpsRedirection();
 app.UseStatusCodePages("application/json","{{\"status\":{0}, \"message\": \"Oops, are you sure resource/end point really here? Or probably bad requests?\" }}");
+// Global Error Middleware
+app.UseMiddleware<ErrorCatchMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
