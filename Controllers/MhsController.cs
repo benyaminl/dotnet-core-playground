@@ -28,13 +28,15 @@ namespace TodoApi.Controllers
         public async Task<ActionResult<IEnumerable<MhsModel>>> Getmhs()
         {
             var query = _context.mhs;
+            List<MhsModel> result;
             try {
-                return await query.ToListAsync();
+                result = await query.ToListAsync();
             } catch (Exception e) {
                 // example of using double exception to point the error
                 string msg = e.Message + " : query = " + query.ToQueryString();
                 throw new Exception(msg,e);
             }
+            return result;
         }
 
         // GET: api/Mhs/5

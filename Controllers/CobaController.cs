@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System.Diagnostics;
 
 namespace TodoApi.Controllers {
     [Route("api/[controller]")]
@@ -19,6 +20,18 @@ namespace TodoApi.Controllers {
         public CobaController(AppDBContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("uptime")]
+        public IActionResult uptime() {
+            DateTime start = Process.GetCurrentProcess().StartTime;
+            DateTime now = DateTime.Now;
+            TimeSpan elapsed = now.ToUniversalTime().Subtract(start.ToUniversalTime());
+            return Ok(new {
+                start = start.ToString(),
+                now = now.ToString(),
+                elapsed = elapsed.ToString()
+            });
         }
 
         [HttpGet]
