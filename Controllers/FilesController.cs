@@ -5,6 +5,7 @@ using Minio;
 using Minio.DataModel;
 using System.Web;
 using System.Reactive.Linq; // Linq? Ini baru sih 
+using System.Diagnostics;
 
 namespace TodoApi.Controllers
 {
@@ -20,8 +21,20 @@ namespace TodoApi.Controllers
 
         [HttpGet("")] 
         public async Task<IActionResult> getBucketList(){
-            var list = await _minio.ListBucketsAsync();
-
+            var list = _minio;
+            try {
+                await list.ListBucketsAsync();
+            } catch (Exception e) {
+                // Get stack trace for the exception with source file information
+                var st = new StackTrace(e, true);
+                // Get the top stack frame
+                var frame = st.GetFrame(0);
+                // Get the line number from the stack frame
+                var line = frame?.GetFileLineNumber();
+                // example of using double exception to point the error
+                string msg = e.Message + " | Minio Get File List - Line : " + line;
+                throw new Exception(msg,e);
+            }
             return Ok(list);
         }
 

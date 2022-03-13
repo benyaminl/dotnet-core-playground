@@ -27,7 +27,14 @@ namespace TodoApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MhsModel>>> Getmhs()
         {
-            return await _context.mhs.ToListAsync();
+            var query = _context.mhs;
+            try {
+                return await query.ToListAsync();
+            } catch (Exception e) {
+                // example of using double exception to point the error
+                string msg = e.Message + " : query = " + query.ToQueryString();
+                throw new Exception(msg,e);
+            }
         }
 
         // GET: api/Mhs/5

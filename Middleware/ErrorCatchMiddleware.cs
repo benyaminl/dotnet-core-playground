@@ -48,7 +48,13 @@ public class ErrorCatchMiddleware {
                     // To String because can't be encoded
                     exception = error?.GetType().ToString(),
                     // to multiple array, so still human readable per row
-                    errorTrace = error?.StackTrace?.Split("\n") 
+                    errorTrace = error?.StackTrace?.Split("\n"),
+                    // Only used when, we use double throw
+                    sourceError = new {
+                        message = error?.InnerException?.Message,
+                        sourceException = error?.InnerException?.GetType().ToString(),
+                        sourceTrace =  error?.InnerException?.StackTrace?.Split("\n").Reverse()
+                    }
                 });
             } else {
                 result = JsonSerializer.Serialize(new { 
