@@ -10,6 +10,11 @@ RUN dotnet dev-certs https -ep /source/TodoApi.pfx -p 12345
 RUN dotnet user-secrets -p /source/TodoApi.csproj init
 RUN dotnet user-secrets -p /source/TodoApi.csproj set "Kestrel:Certificates:Development:Password" "12345"
 
+# Disable Cache on Docker when build 
+# ALWAYS USE --build-arg CACHE_DATE=$(date +%Y-%m-%d:%H:%M:%S)
+# If you need to drop cache before this, use --build --no-cache flag
+# @see https://stackoverflow.com/a/38261124/4906348
+ARG CACHE_DATE=not_a_date
 # copy and publish app and libraries
 COPY . .
 RUN dotnet build -o /app --no-restore

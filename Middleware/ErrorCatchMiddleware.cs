@@ -44,23 +44,17 @@ public class ErrorCatchMiddleware {
             if (env.IsDevelopment()) {
                 result = JsonSerializer.Serialize(new { 
                     code = response.StatusCode, 
-                    message = error?.Message, 
+                    message = error?.Message ?? error?.InnerException?.Message, 
                     // To String because can't be encoded
-                    exception = error?.GetType().ToString(),
+                    exception = error?.InnerException?.GetType().ToString() ?? error?.GetType().ToString(),
                     // to multiple array, so still human readable per row
-                    errorTrace = error?.StackTrace?.Split("\n"),
-                    // Only used when, we use double throw
-                    sourceError = new {
-                        message = error?.InnerException?.Message,
-                        sourceException = error?.InnerException?.GetType().ToString(),
-                        sourceTrace =  error?.InnerException?.StackTrace?.Split("\n").Reverse()
-                    }
+                    errorTrace = error?.InnerException?.StackTrace?.Split("\n").Reverse() ?? error?.StackTrace?.Split("\n")
                 });
             } else {
                 result = JsonSerializer.Serialize(new { 
                     code = response.StatusCode, 
-                    message = error?.Message, 
-                    exception = error?.GetType().ToString()
+                    message = error?.Message ?? error?.InnerException?.Message, 
+                    exception = error?.InnerException?.GetType().ToString() ?? error?.GetType().ToString(),
                 });
             }
 
