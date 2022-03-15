@@ -34,6 +34,15 @@ namespace TodoApi.Controllers {
             });
         }
 
+        [HttpGet("db-connection")]
+        public IActionResult checkConnection() {
+            var result = new {
+                status = (_context.Database.CanConnect()) ? "Terkoneksi" : "Gagal"
+            };
+
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MhsModel>>> index() {
             return await _context.mhs.Where(d => d.nama.Contains("be"))
