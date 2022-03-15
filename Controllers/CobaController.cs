@@ -10,16 +10,19 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
+using Minio;
 
 namespace TodoApi.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class CobaController : ControllerBase {
         private readonly AppDBContext _context;
+        private readonly MinioClient _s3;
 
-        public CobaController(AppDBContext context)
+        public CobaController(AppDBContext context, MinioClient s3)
         {
             _context = context;
+            _s3 = s3;
         }
 
         [HttpGet("uptime")]
@@ -40,6 +43,21 @@ namespace TodoApi.Controllers {
                 status = (_context.Database.CanConnect()) ? "Terkoneksi" : "Gagal"
             };
 
+            return Ok(result);
+        }
+
+        [HttpGet("s3-connection")]
+        public async Task<IActionResult> checkS3() {
+            bool status = true;
+            try {
+                var s3List = await _s3.ListBucketsAsync();
+            } catch {
+                status = false;
+            }
+
+            var result = new {
+                status = (status) ? "Berhasil" : "Gagal"
+            };
             return Ok(result);
         }
 
