@@ -96,7 +96,25 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
+    app.UseSwagger(options =>
+    {
+        // @see https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2004#issuecomment-848332122
+        //Workaround to use the Swagger UI "Try Out" functionality when deployed behind a reverse proxy (APIM) with API prefix /sub context configured
+        options.PreSerializeFilters.Add((swagger, httpReq) =>
+        {
+            if (httpReq.Headers.ContainsKey("X-Forwarded-Host"))
+            {
+                //The httpReq.PathBase and httpReq.Headers["X-Forwarded-Prefix"] is what we need to get the base path.
+                //For some reason, they returning as null/blank. Perhaps this has something to do with how the proxy is configured which we don't have control.
+                //For the time being, the base path is manually set here that corresponds to the APIM API Url Prefix.
+                //In this case we set it to 'sample-app'. 
+        
+                var basePath = "~ben/work";
+                var serverUrl = $"{httpReq.Scheme}://{httpReq.Headers["X-Forwarded-Host"]}/{basePath}";
+                swagger.Servers = new List<OpenApiServer> { new OpenApiServer { Url = serverUrl } };
+            }
+        });
+    });
     app.UseSwaggerUI();
 }
 // global cors policy
