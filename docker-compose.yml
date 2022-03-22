@@ -46,4 +46,12 @@ services:
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
-      
+
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+      - "8222:8222"  
+    volumes:
+      - ./nats/nats-server.conf:/nats-server.conf
+  

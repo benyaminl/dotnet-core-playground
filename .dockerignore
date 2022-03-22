@@ -13,3 +13,5 @@ docker-compose.*.yml
 **/obj
 bin/
 obj/
+SQLDocker/
+nats/
