@@ -11,10 +11,12 @@ public class ErrorCatchMiddleware {
     // @see https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.ihostingenvironment?view=aspnetcore-6.0
     // @see https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-6.0
     private readonly IWebHostEnvironment env;
+    private readonly ILogger<ErrorCatchMiddleware> _log;
 
-    public ErrorCatchMiddleware(RequestDelegate next, IWebHostEnvironment env)
+    public ErrorCatchMiddleware(RequestDelegate next, IWebHostEnvironment env, ILogger<ErrorCatchMiddleware> log)
     {
         this.env = env;
+        this._log = log;
         this._next = next;
     }
 
@@ -63,6 +65,7 @@ public class ErrorCatchMiddleware {
                     // to multiple array, so still human readable per row
                     errorTrace = fullTrace
                 });
+                _log.LogError(String.Join(" | ",errorFocus));
             } else {
                 // Do Logging here using Error ILogger
                 result = JsonSerializer.Serialize(new { 

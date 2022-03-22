@@ -15,8 +15,10 @@ namespace TodoApi.Controllers
     public class FilesController : ControllerBase {
 
         MinioClient _minio;
-        public FilesController(MinioClient minio) {
+        ILogger<FilesController> _log;
+        public FilesController(MinioClient minio, ILogger<FilesController> log) {
             _minio = minio;
+            _log = log;
         }
 
         [HttpGet("")] 
@@ -33,6 +35,7 @@ namespace TodoApi.Controllers
                 var line = frame?.GetFileLineNumber();
                 // example of using double exception to point the error
                 string msg = e.Message + " | Minio Get File List - Line : " + line;
+
                 throw new Exception(msg,e);
             }
             return Ok(list);
