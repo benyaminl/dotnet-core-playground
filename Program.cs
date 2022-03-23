@@ -12,6 +12,7 @@ using System.Text;
 using Minio.AspNetCore;
 using Minio;
 using TodoApi.Middleware;
+using Probst.AspNetCore.Nats;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,13 @@ builder.Services.AddDbContext<AppDBContext>(
         +";Database="+db+";User Id="+user+";Password="+pass, 
             i => i.UseRowNumberForPaging())
 );
+
+builder.Services.AddNats(o => {
+    o.Url = "nats://" + builder.Configuration.GetValue<string>("NATS_HOST") + ":" 
+      + builder.Configuration.GetValue<string>("NATS_PORT");
+    o.User = builder.Configuration.GetValue<string>("NATS_USER");
+    o.Password = builder.Configuration.GetValue<string>("NATS_PASS");
+});
 
 builder.Services.AddMinio(opt => {
     opt.Endpoint = builder.Configuration.GetValue<string>("MINIO_ENDPOINT");
