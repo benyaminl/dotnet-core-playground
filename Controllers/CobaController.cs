@@ -82,6 +82,7 @@ namespace TodoApi.Controllers {
             return Ok(d);
         }
         
+        [ProducesResponseTypeAttribute(StatusCodes.Status200OK,Type = typeof(Models.Requests.LoginRequest))]
         [Produces("application/json")]
         [HttpGet("query-param")]
         public ActionResult getQueryParam(string page, int coba) {
@@ -103,6 +104,7 @@ namespace TodoApi.Controllers {
             return Ok();
         }
 
+        [ProducesResponseTypeAttribute(StatusCodes.Status200OK,Type = typeof(class Response{ public Object data; public string msg;}))]
         [HttpPost("post-json")] 
         public ActionResult postJson([FromBody] PostJSON data,[FromQuery(Name = "c")] string coba) {
             var result = new {
