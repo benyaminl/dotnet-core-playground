@@ -1,5 +1,5 @@
 # .NET Core 6.0 playground with SQL Server and S3
-
+[![wakatime](https://wakatime.com/badge/user/61ea0986-ad92-4f11-a269-8a63ad48b2cc/project/49f0cfe9-2ee8-4737-a9a8-129f4f163b7c.svg)](https://wakatime.com/badge/user/61ea0986-ad92-4f11-a269-8a63ad48b2cc/project/49f0cfe9-2ee8-4737-a9a8-129f4f163b7c)
 This is a simple .NET Core 6.0 playground with SQL Server trusted connection/WinAuth, and swagger UI and some improvement on the swagger generator. 
 
 I don't provide any other readme as this is just a playground for myself. kindly follow https://blog.benyamin.xyz to see more notes regarding this project. 
