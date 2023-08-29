@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
 using Minio;
+using TodoApi.Models.Responses;
 
 namespace TodoApi.Controllers {
     [Route("api/[controller]")]
@@ -104,7 +105,7 @@ namespace TodoApi.Controllers {
             return Ok();
         }
 
-        [ProducesResponseTypeAttribute(StatusCodes.Status200OK,Type = typeof(class Response{ public Object data; public string msg;}))]
+        [ProducesResponseTypeAttribute(StatusCodes.Status200OK,Type = typeof(ApiResponse))]
         [HttpPost("post-json")] 
         public ActionResult postJson([FromBody] PostJSON data,[FromQuery(Name = "c")] string coba) {
             var result = new {

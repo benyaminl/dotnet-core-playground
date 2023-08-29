@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace TodoApi.Controllers;
 
 [ApiController]
-[Authorize]
+// Example implement Policy
+[Authorize(Policy = "RequireAdminRole")]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {

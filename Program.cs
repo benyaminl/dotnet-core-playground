@@ -13,6 +13,7 @@ using Minio.AspNetCore;
 using Minio;
 using TodoApi.Middleware;
 using Probst.AspNetCore.Nats;
+using TodoApi.Authentication.Roles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
 
     });
+
+// For Roles example, to be clean hidden as extened function for a class
+builder.Services.AddAuthorizationRoles();
+
+// For Builtin Well.. Use...
+// Uncoment this and comment the custom JWT Builder above
+// builder.Services.AddAuthentication()
+//     .AddJwtBearer("Bearer", o => {
+//         o.SaveToken = false;
+//         var secret = builder.Configuration.GetValue<string>("Authentication:Schemes:Bearer:IssuerSigningKey") ?? "";
+        
+//         o.TokenValidationParameters
+//             .IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+//         Console.WriteLine(o.TokenValidationParameters.IssuerSigningKey.ToString());
+//     });
 
 builder.Services.AddSwaggerGen(c =>
 {
